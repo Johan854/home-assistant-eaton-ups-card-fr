@@ -1,7 +1,6 @@
 # Eaton UPS Card (FR)
 
-Carte Home Assistant pour onduleur Eaton : état, tension de sortie, charge, autonomie et puissance active, au style verre, optimisée pour iPhone, iPad et kiosque en mode portrait.
-Traduction française de [home-assistant-eaton-ups-card](https://github.com/BeGiBue/home-assistant-eaton-ups-card) de BeGiBue.
+Carte Home Assistant pour onduleur Eaton : état, tension de sortie, charge, autonomie, puissance active, **charge de la batterie**, seuils de transfert, signal sonore et fréquence nominale. Style verre, optimisée pour iPhone, iPad et kiosque en mode portrait. Elle suit automatiquement le thème clair/sombre de Home Assistant. Traduction française de [home-assistant-eaton-ups-card](https://github.com/BeGiBue/home-assistant-eaton-ups-card) de BeGiBue.
 
 ## Installation via HACS (dépôt personnalisé)
 
@@ -15,19 +14,45 @@ Traduction française de [home-assistant-eaton-ups-card](https://github.com/BeGi
 ```yaml
 type: custom:eaton-ups-card
 name: Eaton 3S 850
-status_entity: sensor.ups_status
-status_data_entity: sensor.ups_status_data
-voltage_entity: sensor.ups_output_voltage
-load_entity: sensor.ups_load
-runtime_entity: sensor.ups_battery_runtime
-power_entity: sensor.ups_real_power
+status_entity: sensor.myups_etat
+status_data_entity: sensor.myups_code_d_etat
+voltage_entity: sensor.myups_tension_de_sortie
+load_entity: sensor.myups_charge
+runtime_entity: sensor.myups_autonomie_de_la_batterie
+power_entity: sensor.myups_puissance_reelle
+# Facultatif (masqué si l'entité n'existe pas)
+battery_entity: sensor.myups_charge_de_la_batterie
+nominal_power_entity: sensor.myups_puissance_nominale
+low_battery_entity: sensor.myups_consigne_de_batterie_faible
+transfer_low_entity: sensor.myups_transfert_tension_basse
+transfer_high_entity: sensor.myups_transfert_tension_haute
+beeper_entity: sensor.myups_etat_du_signal_sonore
+frequency_entity: sensor.myups_frequence_de_sortie_nominale
 show_status_data: true
 scale: 1
 image_mode: background
 image: /local/image/onduleur.webp   # facultatif
 ```
 
-Les entités par défaut sont celles de l'intégration NUT avec Home Assistant en allemand : adaptez-les aux vôtres dans l'éditeur visuel.
+Les entités par défaut sont celles de l'intégration NUT de Home Assistant en français, pour un onduleur nommé `myups` : adaptez-les aux vôtres dans l'éditeur visuel.
+
+## Entités facultatives
+
+| Option | Ce qu'elle ajoute |
+|---|---|
+| `battery_entity` | Tuile pleine largeur « Charge de la batterie » avec barre, icône selon le niveau et « en charge ». Passe en orange puis en rouge à l'approche du seuil de batterie faible (15 % par défaut). |
+| `low_battery_entity` | Repère du seuil de batterie faible sur la barre de batterie, et seuil utilisé pour les couleurs. |
+| `nominal_power_entity` | Sous la puissance active : « sur 850 W » et une barre de la puissance par rapport à la capacité de l'onduleur. |
+| `transfer_low_entity` / `transfer_high_entity` | Sous la tension de sortie : « Transfert : 184 – 253 V ». La tuile passe en orange si la tension sort de cette plage. |
+| `beeper_entity` | Bouton rond à côté de l'état : haut-parleur actif, ou barré en orange si le signal sonore est coupé. |
+| `frequency_entity` | Ligne discrète en bas de carte : « Fréquence nominale 50 Hz ». |
+
+Un appui sur n'importe quelle tuile ou icône ouvre la fiche de l'entité.
+
+## Historique des versions
+
+- **2.1.0** : charge de la batterie, puissance nominale, seuil de batterie faible, seuils de transfert, signal sonore et fréquence nominale ; entités par défaut en français ; `validate.yml` déplacé dans `.github/workflows/` pour que la validation HACS fonctionne.
+- **2.0.0** : version initiale.
 
 ## Licence
 
