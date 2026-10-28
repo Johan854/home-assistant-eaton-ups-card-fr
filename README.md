@@ -1,6 +1,6 @@
 # Eaton UPS Card (FR)
 
-Carte Home Assistant pour onduleur Eaton : état, tension de sortie, charge, autonomie, puissance active, **charge de la batterie**, seuils de transfert, signal sonore et fréquence nominale. Style verre, optimisée pour iPhone, iPad et kiosque en mode portrait. Elle suit automatiquement le thème clair/sombre de Home Assistant. Traduction française de [home-assistant-eaton-ups-card](https://github.com/BeGiBue/home-assistant-eaton-ups-card) de BeGiBue.
+Carte Home Assistant pour onduleur Eaton : état, tension de sortie, charge, autonomie, puissance active, **charge de la batterie**, seuils de transfert, signal sonore et fréquence nominale. Style verre avec nuance de couleur au choix, optimisée pour iPhone, iPad et kiosque en mode portrait. Elle suit automatiquement le thème clair/sombre de Home Assistant. Traduction française de [home-assistant-eaton-ups-card](https://github.com/BeGiBue/home-assistant-eaton-ups-card) de BeGiBue.
 
 ## Installation via HACS (dépôt personnalisé)
 
@@ -36,6 +36,25 @@ image: /local/image/onduleur.webp   # facultatif
 
 Les entités par défaut sont celles de l'intégration NUT de Home Assistant en français, pour un onduleur nommé `myups` : adaptez-les aux vôtres dans l'éditeur visuel.
 
+## Apparence : thème et nuance de couleur
+
+Dans l'éditeur visuel, section **Apparence** :
+
+| Option | Valeurs |
+|---|---|
+| `theme` | `auto` (suit Home Assistant), `light`, `dark` |
+| `nuance` | `theme` (par défaut), `braise`, `ocean`, `lagon`, `foret`, `lavande`, `framboise`, `ambre`, `ardoise`, `perso` |
+| `nuance_perso` | Couleur au choix (sélecteur de couleur), utilisée avec `nuance: perso` |
+| `intensite` | De `0` (neutre) à `2` (très coloré), `1` par défaut |
+
+La nuance teinte le dégradé de fond et la couleur principale des tuiles ; les couleurs d'alerte (vert, orange, rouge) restent identiques.
+
+**Une seule nuance pour toutes tes cartes** : laisse `nuance: theme` et ajoute cette ligne à ton thème Home Assistant (sans thème, c'est la nuance braise) :
+
+```yaml
+carte-nuance: "#2f8fd8"
+```
+
 ## Entités facultatives
 
 | Option | Ce qu'elle ajoute |
@@ -51,6 +70,7 @@ Un appui sur n'importe quelle tuile ou icône ouvre la fiche de l'entité.
 
 ## Historique des versions
 
+- **2.2.0** : style verre propre à la carte (fond dégradé, tuiles en verre), thème clair/sombre automatique ou forcé, nuance de couleur au choix (8 nuances, couleur personnalisée, intensité, ou nuance commune via le thème).
 - **2.1.0** : charge de la batterie, puissance nominale, seuil de batterie faible, seuils de transfert, signal sonore et fréquence nominale ; entités par défaut en français ; `validate.yml` déplacé dans `.github/workflows/` pour que la validation HACS fonctionne.
 - **2.0.0** : version initiale.
 
