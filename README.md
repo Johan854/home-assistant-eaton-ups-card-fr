@@ -34,6 +34,37 @@ image_mode: background
 image: /local/image/onduleur.webp   # facultatif
 ```
 
+### Onduleur MGE / Eaton en USB via ESPHome (+ prise Shelly)
+
+Pour un onduleur lu par un ESP32 (composant `ups_hid`) qui ne remonte ni puissance, ni tension d'entrée : la prise connectée placée sur l'alimentation de l'onduleur fournit la puissance, la tension d'entrée et l'énergie.
+
+```yaml
+type: custom:eaton-ups-card
+name: MGE Ellipse 600
+status_entity: sensor.ups_mge_ellipse_statut
+status_data_entity: ""
+voltage_entity: sensor.ups_mge_ellipse_tension_sortie
+load_entity: sensor.ups_mge_ellipse_charge
+runtime_entity: sensor.ups_mge_ellipse_autonomie
+battery_entity: sensor.ups_mge_ellipse_batterie
+battery_voltage_entity: sensor.ups_mge_ellipse_tension_batterie
+online_entity: binary_sensor.ups_mge_ellipse_secteur_present
+on_battery_entity: binary_sensor.ups_mge_ellipse_sur_batterie
+low_battery_alarm_entity: binary_sensor.ups_mge_ellipse_batterie_faible
+power_entity: sensor.prise_onduleur_puissance          # prise Shelly
+input_voltage_entity: sensor.prise_onduleur_tension    # prise Shelly
+energy_entity: sensor.prise_onduleur_energie           # prise Shelly
+nominal_power: 360        # Ellipse 600 VA = 360 W
+# Vider les entités NUT inutilisées
+nominal_power_entity: ""
+low_battery_entity: ""
+transfer_low_entity: ""
+transfer_high_entity: ""
+beeper_entity: ""
+frequency_entity: ""
+image: /local/image/onduleur-mge.webp   # facultatif
+```
+
 Les entités par défaut sont celles de l'intégration NUT de Home Assistant en français, pour un onduleur nommé `myups` : adaptez-les aux vôtres dans l'éditeur visuel.
 
 ## Apparence : thème et nuance de couleur
@@ -65,11 +96,18 @@ carte-nuance: "#2f8fd8"
 | `transfer_low_entity` / `transfer_high_entity` | Sous la tension de sortie : « Transfert : 184 – 253 V ». La tuile passe en orange si la tension sort de cette plage. |
 | `beeper_entity` | Bouton rond à côté de l'état : haut-parleur actif, ou barré en orange si le signal sonore est coupé. |
 | `frequency_entity` | Ligne discrète en bas de carte : « Fréquence nominale 50 Hz ». |
+| `online_entity` / `on_battery_entity` | Capteurs binaires « secteur présent » / « sur batterie » : ils priment sur le texte d'état pour afficher « En ligne » ou « Sur batterie ». |
+| `low_battery_alarm_entity` | Capteur binaire de batterie faible : état « Batterie faible » et tuile batterie en rouge. |
+| `battery_voltage_entity` | Sous la charge de la batterie : « Tension batterie : 12,9 V ». |
+| `input_voltage_entity` | Sous la tension de sortie : « Entrée : 231 V » (ex. prise Shelly en amont). |
+| `energy_entity` | Ligne en bas de carte : « Énergie 3,42 kWh ». |
+| `nominal_power` | Puissance nominale fixe en W, quand l'onduleur ne la remonte pas : barre et « sur 360 W » sous la puissance. |
 
 Un appui sur n'importe quelle tuile ou icône ouvre la fiche de l'entité.
 
 ## Historique des versions
 
+- **2.3.0** : prise en charge des onduleurs ESPHome (`ups_hid`, ex. MGE Ellipse) : capteurs binaires secteur / batterie / batterie faible, tension batterie, tension d'entrée et énergie d'une prise connectée, puissance nominale fixe. Section « Onduleurs ESPHome / prise connectée » dans l'éditeur.
 - **2.2.0** : style verre propre à la carte (fond dégradé, tuiles en verre), thème clair/sombre automatique ou forcé, nuance de couleur au choix (8 nuances, couleur personnalisée, intensité, ou nuance commune via le thème).
 - **2.1.0** : charge de la batterie, puissance nominale, seuil de batterie faible, seuils de transfert, signal sonore et fréquence nominale ; entités par défaut en français ; `validate.yml` déplacé dans `.github/workflows/` pour que la validation HACS fonctionne.
 - **2.0.0** : version initiale.
